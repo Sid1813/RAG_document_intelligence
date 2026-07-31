@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+
+# Environment Variables
+.env
+
+# Temporary files
+temp.pdf
+
+# Chroma Vector Database
+vector_db/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
