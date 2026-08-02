@@ -2,12 +2,21 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
 
 
+# ==========================================================
+# LOAD LLM
+# ==========================================================
+
 def get_llm():
+
     return ChatGoogleGenerativeAI(
         model="models/gemini-flash-latest",
         temperature=0,
     )
 
+
+# ==========================================================
+# GENERATE ANSWER
+# ==========================================================
 
 def generate_answer(llm, question, documents):
 
@@ -33,22 +42,26 @@ def generate_answer(llm, question, documents):
         for keyword in summary_keywords
     )
 
+    # ------------------------------------------------------
+    # SUMMARY PROMPT
+    # ------------------------------------------------------
+
     if is_summary:
 
         prompt = f"""
 You are an expert document analyst.
 
-Your task is to summarize the document using ONLY the information provided below.
+Summarize the document using ONLY the information below.
 
-Do not invent facts.
+Never invent information.
 
-If the document is incomplete, explicitly state that the summary is based only on the available pages.
+If the document is incomplete, clearly mention that the summary is based only on the available pages.
 
-Format your response exactly like this:
+Return your answer in Markdown.
 
 # Overview
 
-A concise overview.
+Provide a concise overview.
 
 # Key Concepts
 
@@ -62,30 +75,34 @@ A concise overview.
 - Takeaway 2
 - Takeaway 3
 
-Context:
+Document Context:
 
 {context}
 """
+
+    # ------------------------------------------------------
+    # QUESTION ANSWERING PROMPT
+    # ------------------------------------------------------
 
     else:
 
         prompt = f"""
 You are an expert AI document assistant.
 
-Answer the user's question using ONLY the supplied document context.
+Answer the user's question using ONLY the supplied document.
 
 Rules:
 
-- Never make up information.
-- If the answer cannot be found, reply:
+- Never hallucinate.
+- Never invent facts.
+- If the answer is missing, reply:
 "I couldn't find that information in the document."
-- Keep the answer clear and well structured.
-- Use bullet points when appropriate.
-- Quote terminology from the document whenever useful.
-- Do not mention "the provided context."
-- Do not mention that you are an AI assistant.
+- Use headings and bullet points whenever appropriate.
+- Keep answers concise but informative.
+- Do NOT mention "the provided context".
+- Do NOT mention you are an AI.
 
-Context:
+Document Context:
 
 {context}
 
@@ -94,12 +111,40 @@ Question:
 {question}
 """
 
+    # ------------------------------------------------------
+    # CALL GEMINI
+    # ------------------------------------------------------
+
     response = llm.invoke(
-        [
-            HumanMessage(
-                content=prompt
-            )
-        ]
+        [HumanMessage(content=prompt)]
     )
 
-    return response.content
+    # ------------------------------------------------------
+    # RETURN ONLY THE TEXT
+    # ------------------------------------------------------
+
+    if hasattr(response, "text") and response.text:
+        return response.text
+
+    if isinstance(response.content, str):
+        return response.content
+
+    if isinstance(response.content, list):
+
+        answer = ""
+
+        for block in response.content:
+
+            # New LangChain format
+            if hasattr(block, "text"):
+                answer += block.text
+
+            # Dictionary format
+            elif isinstance(block, dict):
+
+                if block.get("type") == "text":
+                    answer += block.get("text", "")
+
+        return answer.strip()
+
+    return str(response.content)
