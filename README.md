@@ -434,73 +434,6 @@ This prevents sensitive credentials and locally generated artifacts from being c
 
 ---
 
-# ⚠️ Current Limitations
-
-This project is currently a functional RAG prototype rather than a production-scale document intelligence platform.
-
-Current limitations include:
-
-- The vector database is rebuilt when a new document is processed.
-- Embedding generation consumes API quota.
-- Reprocessing the same document can require generating embeddings again.
-- Retrieval quality depends on chunking and embedding quality.
-- PDF extraction quality can vary depending on the structure of the source document.
-- Summary quality depends on the retrieved context available to the model.
-- The current chat history exists within the Streamlit session.
-- There is currently no authentication or multi-user document isolation.
-- The application is designed primarily for text-based PDFs.
-
----
-
-# 🔮 Future Improvements
-
-Potential improvements include:
-
-### Retrieval
-
-- Hybrid keyword + semantic retrieval
-- Reranking retrieved chunks
-- Improved chunking strategies
-- Adjustable `top-k` retrieval
-- Metadata-aware retrieval
-- Context compression
-
-### Vector Database
-
-- Persistent vector database caching
-- Document hashing
-- Avoid re-embedding unchanged documents
-- Persistent document collections
-- Support for multiple documents
-
-### Generation
-
-- Improved long-document summarization
-- Conversation-aware retrieval
-- Better citation formatting
-- Streaming responses
-- Improved hallucination detection
-
-### Evaluation
-
-Introduce quantitative RAG evaluation using metrics such as:
-
-- Retrieval precision
-- Retrieval recall
-- Context relevance
-- Answer relevance
-- Answer faithfulness
-
-### Deployment
-
-- Cloud deployment
-- Authentication
-- Multi-user support
-- Persistent storage
-- Production monitoring
-
----
-
 # 🧩 Design Philosophy
 
 The application separates the major components of the RAG pipeline into independent modules:
@@ -572,8 +505,6 @@ The complete core pipeline is operational:
      ↓
     Display Answer + Sources
 
-Future development will focus on improving retrieval quality, persistence, evaluation, and production readiness.
-
 ---
 
 # 👨‍💻 Author
@@ -581,9 +512,3 @@ Future development will focus on improving retrieval quality, persistence, evalu
 **Siddharth Ranganatha**
 
 GitHub: [@Sid1813](https://github.com/Sid1813)
-
----
-
-## ⭐ If you found this project useful
-
-Feel free to explore the repository, experiment with the RAG pipeline, and build upon the architecture.
