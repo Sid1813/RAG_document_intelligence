@@ -511,6 +511,5 @@ The complete core pipeline is operational:
 
 **Siddharth Ranganatha**
 
-GitHub: [@Sid1813](https://github.com/Sid1813)
 
 
