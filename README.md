@@ -483,29 +483,6 @@ The project focuses on understanding the complete path from **raw document → r
 
 ---
 
-# 📌 Project Status
-
-**Status: Functional Prototype**
-
-The complete core pipeline is operational:
-
-    PDF
-     ↓
-    Load
-     ↓
-    Chunk
-     ↓
-    Embed
-     ↓
-    Store
-     ↓
-    Retrieve
-     ↓
-    Generate
-     ↓
-    Display Answer + Sources
-
----
 
 # 👨‍💻 Author
 
